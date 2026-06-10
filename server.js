@@ -4,7 +4,14 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+
+// AJOUT DE LA SÉCURITÉ CORS POUR LE JEU EN LIGNE
+const io = new Server(server, {
+    cors: {
+        origin: "*", // Autorise toutes les connexions internet
+        methods: ["GET", "POST"]
+    }
+});
 
 app.use(express.static('public'));
 
