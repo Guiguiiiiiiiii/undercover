@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Undercover Web</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="deathOverlay" style="display:none;"></div>
+
+    <div id="app">
+        <div id="screen-home" class="screen active glass-panel">
+            <h1 class="logo">🕵️‍♂️ Undercover</h1>
+            <input type="text" id="playerName" placeholder="Ton Pseudo (max 32)" maxlength="32">
+            <button class="btn-primary mt-3" onclick="createLobby()">Créer un Lobby</button>
+            
+            <div class="lobbies-section mt-3">
+                <h3>Parties en ligne :</h3>
+                <ul id="publicLobbiesList" class="lobby-list"></ul>
+            </div>
+        </div>
+
+        <div id="screen-lobby" class="screen lobby-container glass-panel">
+            <h2>Lobby de <span id="lobbyHostDisplay" class="highlight"></span></h2>
+            <div class="lobby-columns mt-3">
+                <div id="settingsPanel" class="lobby-settings glass-inside" style="display:none;">
+                    <h3 class="panel-title">Settings</h3>
+                    <label>Thème des mots : <select id="themeSelect"></select></label><br>
+                    <label>Nbr Undercovers: <input type="number" id="nbUndercovers" value="1" min="0" class="small-input"></label><br>
+                    <label>Nbr Mr White: <input type="number" id="nbMrWhites" value="1" min="0" class="small-input"></label><br>
+                    <label>Tps (écriture): <input type="number" id="writeTime" value="30" min="5" class="small-input">s</label><br>
+                    <label>Tps (débat): <input type="number" id="discussTime" value="60" min="10" class="small-input">s</label><br>
+                    <button class="btn-primary mt-3" onclick="startGame()">Lancer la partie</button>
+                </div>
+                <div class="lobby-players">
+                    <h3 class="panel-title">Joueurs (<span id="playerCountDisplay">0</span>/10) <button class="btn-vote" style="float:right;" onclick="leaveLobby()">Quitter</button></h3>
+                    <div id="playerGrid" class="player-grid कल्चर-style"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="screen-game" class="screen">
+            <div class="fixed-badge top-center" id="topCenterBadge"></div>
+            
+            <div class="game-board">
+                <div id="playerCircle"></div>
+                
+                <div class="center-action">
+                    <h3 id="timerDisplay"></h3>
+                    <div id="myTurnSection" style="display: none;">
+                        <input type="text" id="wordInput" placeholder="Ton mot (max 20)..." maxlength="20">
+                        <button class="btn-primary mt-3" onclick="submitWord()">Valider</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="spectatorPanel" class="glass-inside spectator-panel" style="display:none;">
+                <h4>Mode Spectateur 👻</h4>
+                <p>Civils : <span id="specCivilWord" class="highlight"></span> | Undercover : <span id="specUnderWord" class="highlight"></span></p>
+            </div>
+        </div>
+
+        <div id="screen-mrwhite" class="screen glass-panel">
+            <h2 id="mwMessage"></h2>
+            <input type="text" id="mwGuessInput" placeholder="Devine le mot..." maxlength="20">
+            <button class="btn-primary mt-3" onclick="submitMwGuess()">Tenter ma chance</button>
+        </div>
+
+        <div id="screen-end" class="screen glass-panel">
+            <h1 id="winMessage"></h1>
+            <div id="recapSection" class="recap-box"></div>
+            
+            <button class="btn-primary mt-3" id="btnReturnLobby" onclick="returnToLobby()" style="display:none;">Relancer (Retour Lobby)</button>
+            <button class="btn-vote mt-3" onclick="leaveLobby()" style="width:100%; padding: 15px; font-size: 15px; background: rgba(244, 63, 94, 0.2); border: 1px solid var(--accent);">Quitter le salon</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>
